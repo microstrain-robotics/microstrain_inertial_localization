@@ -1,0 +1,58 @@
+<launch>
+  <!-- These arguments will be consumed by the yml files -->
+  <arg name="port"     default="/dev/microstrain_main" doc="Serial port that the GQ7 is connected on" />
+  <arg name="baudrate" default="115200"                doc="Baudrate of the serial port that the GQ7 is connected on" />
+
+  <arg name="frame_id"       default="gq7_link"            doc="The frame ID that will represent the GQ7 in the tf tree" />
+  <arg name="gnss1_frame_id" default="gnss_1_antenna_link" doc="The frame ID that will represent GNSS antenna 1 in the tf tree" />
+  <arg name="gnss2_frame_id" default="gnss_2_antenna_link" doc="The frame ID that will represent GNSS antenna 2 in the tf tree" />
+
+  <arg name="ntrip"            default="false"                doc="Whether or not to enable the NTRIP interface on the microstrain driver and run an NTRIP client" />
+  <arg name="ntrip_host"       default="20.185.11.35"         doc="The host name or IP of the NTRIP caster you want to connect to" />
+  <arg name="ntrip_port"       default="2101"                 doc="The port of the NTRIP caster you want to connect to" />
+  <arg name="ntrip_mountpoint" default="VRS_RTCM3"            doc="The mountpoint on the NTRIP caster you want to connec to" />
+  <arg name="ntrip_username"   default="user"                 doc="Username to use to authenticate with the NTRIP caster" />
+  <arg name="ntrip_password"   default="pass"                 doc="Password to use to authenticate with the NTRIP caster" />
+  <arg name="ntrip_ssl"        default="false"                doc="Whether or not to connect using SSL to the NTRIP caster" />
+  <arg name="aux_port"         default="/dev/microstrain_aux" doc="Serial port that the GQ7 aux port is connected on. Only used if ntrip is true" />
+  <arg name="aux_baudrate"     default="115200"               doc="Baudrate of the serial port that the GQ7 aux port is connected on. Only used if ntrip is true" />
+
+  <arg name="robot_localization"          default="false"            doc="Whether we should run our own ekf_localization node" />
+  <arg name="robot_localization_name"     default="ekf_localization" doc="Name of either our node or already running robot_localization node" />
+  <arg name="robot_localization_imu_name" default="imu0"             doc="Sensor name for the IMU data in robot_localization" />
+
+  <!-- Manually configure the node instead of the launch file so we can use the passed arguments -->
+  <node name="gq7_driver" pkg="microstrain_inertial_driver" type="microstrain_inertial_driver_node" output="screen" ns="/gq7">
+    <!-- Set the parameters through our custom params file -->
+    <rosparam file="$(find microstrain_inertial_localization)/config/gq7_odom/gq7.yml" command="load" subst_value="true" />
+  </node>
+
+  <!-- Configure some settings for EKF localization whether or not it is being run -->
+  <rosparam subst_value="true">
+    $(arg robot_localization_name):
+      $(arg robot_localization_imu_name): /gq7/imu/data
+      $(arg robot_localization_imu_name)_config: [false, false, false,
+                                                  false, false, false,
+                                                  false, false, false,
+                                                  true, true, true,
+                                                  true, true, true]
+      $(arg robot_localization_imu_name)_differential: false
+      $(arg robot_localization_imu_name)_remove_gravitational_acceleration: true
+  </rosparam>
+
+  <!-- If we were asked, start our own robot_localization node -->
+  <group if="$(arg robot_localization)">
+    <node name="$(arg robot_localization_name)" pkg="robot_localization" type="ekf_localization_node" output="screen" ns="/">
+      <!-- Set the parameters through our custom params file -->
+      <rosparam file="$(find microstrain_inertial_localization)/config/gq7_odom/ekf_localization.yml" command="load" subst_value="true" />
+    </node>
+  </group>
+
+  <!-- If ntrip was requested, launch that as well -->
+  <group if="$(arg ntrip)">
+    <node name="gq7_ntrip_client" pkg="ntrip_client" type="ntrip_ros.py" output="screen" ns="/gq7">
+      <!-- Set the parameters through our custom params file -->
+      <rosparam file="$(find microstrain_inertial_localization)/config/gq7_odom/ntrip_client.yml" command="load" subst_value="true" />
+    </node>
+  </group>
+</launch>

@@ -1,0 +1,18 @@
+# These can be set by passing args to the launch file
+host       : $(arg ntrip_host)
+port       : $(arg ntrip_port)
+mountpoint : $(arg ntrip_mountpoint)
+
+# For this example, we will always assume that we are going to authenticate
+authenticate : true
+username : $(arg ntrip_username)
+password : $(arg ntrip_password)
+
+# Allow SSL, but do not allow custom certs and keys
+ssl : $(arg ntrip_ssl)
+
+# Since thee RTCM will be coming from the RTK base station whose position will be the map frame, set the frame id to map
+rtcm_frame_id : "map"
+
+# Use the smaller RTCM message option
+rtcm_message_package : "rtcm_msgs"
