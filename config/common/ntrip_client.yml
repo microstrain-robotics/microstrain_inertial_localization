@@ -11,7 +11,7 @@ password : $(arg ntrip_password)
 # Allow SSL, but do not allow custom certs and keys
 ssl : $(arg ntrip_ssl)
 
-# Since thee RTCM will be coming from the RTK base station whose position will be the map frame, set the frame id to map
+# Since the RTCM will be coming from the RTK base station whose position may be the map frame, set the frame id to map
 rtcm_frame_id : "map"
 
 # Use the smaller RTCM message option

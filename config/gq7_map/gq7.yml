@@ -15,7 +15,7 @@ map_frame_id      : "map"                      # Frame ID of the local tangent p
 earth_frame_id    : "earth"                    # Frame ID of the global frame
 gnss1_frame_id    : $(arg gnss1_frame_id)      # Frame ID of GNSS antenna 1. This represents GNSS antenna 1 of the GQ7 in the tf tree
 gnss2_frame_id    : $(arg gnss2_frame_id)      # Frame ID of GNSS antenna 2. This represents GNSS antenna 2 of the GQ7 in the tf tree
-target_frame_id   : "odom"                     # Frame ID that we will publish a transform to.
+target_frame_id   : "base_link"                # Frame ID that we will publish a transform to.
 
 # We will use relative transform mode, meaning that we will publish the following transforms from this node
 #   earth_frame_id -> map_frame_id
@@ -81,15 +81,8 @@ gnss2_antenna_offset        : $(arg gnss2_antenna_offset)
 #         Bit 3 - External Heading (first valid external heading will be used to initialize the filter)
 filter_auto_heading_alignment_selector : $(arg filter_auto_heading_alignment_selector)
 
-# Static IMU message covariance values (the device does not generate these) 
-imu_orientation_cov   : [0.01, 0, 0, 0, 0.01, 0, 0, 0, 0.01]
-imu_linear_cov        : [0.01, 0, 0, 0, 0.01, 0, 0, 0, 0.01]
-imu_angular_cov       : [0.01, 0, 0, 0, 0.01, 0, 0, 0, 0.01]
-imu_mag_cov           : [0.01, 0, 0, 0, 0.01, 0, 0, 0, 0.01]
-imu_pressure_variance : 0.01
-
-# This will contain the raw IMU data, NOT the filtered IMU data. This is useful for tools like robot_localization
-imu_data_rate : 100
+# For this use case, we will not publish any IMU data
+imu_data_rate : 0
 
 # For this use case, we will not publish any raw GNSS information
 gnss1_llh_position_data_rate   : 0

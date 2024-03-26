@@ -1,0 +1,15 @@
+<launch>
+  <!-- This frame_id will be what is used to represent the microstrain sensor in the mock robot-->
+  <arg name="frame_id" />
+  <arg name="gnss1_frame_id" />
+  <arg name="gnss2_frame_id" />
+
+  <!-- Load a simple xacro robot -->
+  <param name="robot_description" command="
+      $(find xacro)/xacro $(find microstrain_inertial_localization)/urdf/mock_robot.urdf.xacro
+        frame_id:=$(arg frame_id)
+        gnss1_frame_id:=$(arg gnss1_frame_id)
+        gnss2_frame_id:=$(arg gnss2_frame_id)"
+    />
+  <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" />
+</launch>
