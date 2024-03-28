@@ -49,11 +49,11 @@
   <rosparam subst_value="true">
     $(arg robot_localization_name):
       $(arg robot_localization_imu_name): /gq7/imu/data
-      $(arg robot_localization_imu_name)_config: [false, false, false,
-                                                  false, false, false,
-                                                  false, false, false,
-                                                  true, true, true,
-                                                  true, true, true]
+      $(arg robot_localization_imu_name)_config: [false, false, false,  # X, Y, Z disabled since no position data in IMU
+                                                  false, false, false,  # roll, pitch, yaw disabled since raw IMU data does not have very good attitude estimates
+                                                  false, false, false,  # X, Y, Z velocity disabled since no linear velocity in IMU
+                                                  true, true, true,     # roll, pitch, yaw rates (angular rates) enabled
+                                                  true, true, true]     # X, Y, Z acceleration (linear acceleration) enabled
       $(arg robot_localization_imu_name)_differential: false
       $(arg robot_localization_imu_name)_remove_gravitational_acceleration: true
   </rosparam>
@@ -68,7 +68,7 @@
 
   <!-- If we were asked, launch a mock robot that will publish the transforms between our sensor, base_link, and the GNSS1/2 antennas -->
   <group if="$(arg mock_robot)">
-    <include file="$(find microstrain_inertial_localization)/launch/mock_robot_description.launch" pass_all_args="true" />
+    <include file="$(find microstrain_inertial_localization)/launch/include/mock_robot_description.launch" pass_all_args="true" />
   </group>
 
   <!-- If ntrip was requested, launch that as well -->

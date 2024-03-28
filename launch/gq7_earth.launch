@@ -7,10 +7,6 @@
   <arg name="gnss1_frame_id" default="gnss_1_antenna_link" doc="The frame ID that will represent GNSS antenna 1 in the tf tree" />
   <arg name="gnss2_frame_id" default="gnss_2_antenna_link" doc="The frame ID that will represent GNSS antenna 2 in the tf tree" />
 
-  <arg name="filter_relative_position_frame"  default="2"                doc="Relative position frame selector" />
-  <arg name="filter_relative_position_source" default="2"                doc="Relataive position source selector" />
-  <arg name="filter_relative_position_ref"    default="[0.0, 0.0, 0.01]" doc="Reference position. Units dictated by filter_relative_position_frame" />
-
   <arg name="gnss1_antenna_offset_source" default="1"                doc="GNSS1 antenna offset source selector" />
   <arg name="gnss1_antenna_offset"        default="[0.0, 0.7, 0.0]"  doc="GNSS1 antenna offset. Only used if gnss1_antenna_offset_source is set to 1" />
   <arg name="gnss2_antenna_offset_source" default="1"                doc="GNSS1 antenna offset source selector" />
@@ -35,7 +31,7 @@
   <!-- Manually configure the node instead of the launch file so we can use the passed arguments -->
   <node name="gq7_driver" pkg="microstrain_inertial_driver" type="microstrain_inertial_driver_node" output="screen" ns="/gq7">
     <!-- Set the parameters through our custom params file -->
-    <rosparam file="$(find microstrain_inertial_localization)/config/gq7_map/gq7.yml" command="load" subst_value="true" />
+    <rosparam file="$(find microstrain_inertial_localization)/config/gq7_earth/gq7.yml" command="load" subst_value="true" />
 
     <!-- If you want to override any settings specified in the params.yml file, make a new yaml file, and set the value via the params_file arg -->
     <rosparam file="$(arg params_file)" command="load" unless="$(eval arg('params_file') == ' ')" subst_value="true" />

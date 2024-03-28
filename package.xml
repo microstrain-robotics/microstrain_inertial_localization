@@ -53,6 +53,7 @@
 
   <exec_depend version_gte="4.0.0">microstrain_inertial_driver</exec_depend>
   <exec_depend>ntrip_client</exec_depend>
+  <exec_depend>robot_localization</exec_depend>
 
 
   <!-- The export tag contains other, unspecified, tags -->
