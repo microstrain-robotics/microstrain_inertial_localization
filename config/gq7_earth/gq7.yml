@@ -14,7 +14,7 @@ frame_id          : $(arg frame_id)            # Frame ID of all of the filter m
 earth_frame_id    : "earth"                    # Frame ID of the global frame
 gnss1_frame_id    : $(arg gnss1_frame_id)      # Frame ID of GNSS antenna 1. This represents GNSS antenna 1 of the GQ7 in the tf tree
 gnss2_frame_id    : $(arg gnss2_frame_id)      # Frame ID of GNSS antenna 2. This represents GNSS antenna 2 of the GQ7 in the tf tree
-target_frame_id   : "base_link"                # Frame ID that we will publish a transform to.
+target_frame_id   : $(arg base_link_frame_id)  # Frame ID that we will publish a transform to.
 
 # We will use relative transform mode, meaning that we will publish the following transforms from this node
 #   earth_frame_id -> map_frame_id

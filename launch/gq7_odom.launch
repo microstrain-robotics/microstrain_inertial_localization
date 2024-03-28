@@ -1,9 +1,13 @@
 <launch>
   <!-- These arguments will be consumed by the yml files -->
-  <arg name="port"     default="/dev/microstrain_main" doc="Serial port that the GQ7 is connected on" />
-  <arg name="baudrate" default="115200"                doc="Baudrate of the serial port that the GQ7 is connected on" />
+  <arg name="port"         default="/dev/microstrain_main" doc="Serial port that the GQ7 is connected on" />
+  <arg name="baudrate"     default="115200"                doc="Baudrate of the serial port that the GQ7 is connected on" />
+  <arg name="aux_port"     default="/dev/microstrain_aux"  doc="Serial port that the GQ7 aux port is connected on. Only used if ntrip is true" />
+  <arg name="aux_baudrate" default="115200"                doc="Baudrate of the serial port that the GQ7 aux port is connected on. Only used if ntrip is true" />
 
   <arg name="frame_id"       default="gq7_link"            doc="The frame ID that will represent the GQ7 in the tf tree" />
+  <arg name="map_frame_id"   default="map"                 doc="The frame ID of the local tangent plane" />
+  <arg name="odom_frame_id"  default="odom"                doc="The frame ID that you want to globally localize." />
   <arg name="gnss1_frame_id" default="gnss_1_antenna_link" doc="The frame ID that will represent GNSS antenna 1 in the tf tree" />
   <arg name="gnss2_frame_id" default="gnss_2_antenna_link" doc="The frame ID that will represent GNSS antenna 2 in the tf tree" />
 
@@ -25,8 +29,6 @@
   <arg name="ntrip_username"   default="user"                 doc="Username to use to authenticate with the NTRIP caster" />
   <arg name="ntrip_password"   default="pass"                 doc="Password to use to authenticate with the NTRIP caster" />
   <arg name="ntrip_ssl"        default="false"                doc="Whether or not to connect using SSL to the NTRIP caster" />
-  <arg name="aux_port"         default="/dev/microstrain_aux" doc="Serial port that the GQ7 aux port is connected on. Only used if ntrip is true" />
-  <arg name="aux_baudrate"     default="115200"               doc="Baudrate of the serial port that the GQ7 aux port is connected on. Only used if ntrip is true" />
 
   <arg name="robot_localization"          default="false"            doc="Whether we should run our own ekf_localization node" />
   <arg name="robot_localization_name"     default="ekf_localization" doc="Name of either our node or already running robot_localization node" />
