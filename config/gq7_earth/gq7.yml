@@ -16,11 +16,9 @@ gnss1_frame_id    : $(arg gnss1_frame_id)      # Frame ID of GNSS antenna 1. Thi
 gnss2_frame_id    : $(arg gnss2_frame_id)      # Frame ID of GNSS antenna 2. This represents GNSS antenna 2 of the GQ7 in the tf tree
 target_frame_id   : $(arg base_link_frame_id)  # Frame ID that we will publish a transform to.
 
-# We will use relative transform mode, meaning that we will publish the following transforms from this node
-#   earth_frame_id -> map_frame_id
-#   map_frame_id -> target_frame_id
-# This helps ROS standard tools consume and display position information produced by the device.
-# This also allows something like robot_localization to sit alongside this node.
+# We will use global transform mode, meaning that we will publish the following transforms from this node
+#   earth_frame_id -> target_frame_id
+# This is hard for ROS standard tools to understand, but can be useful for users who do not want to use those tools
 tf_mode: 1
 
 # Enable the RTK dongle interface for communication with the 3DM-RTK.

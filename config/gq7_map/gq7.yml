@@ -21,7 +21,6 @@ target_frame_id   : $(arg base_link_frame_id)  # Frame ID that we will publish a
 #   earth_frame_id -> map_frame_id
 #   map_frame_id -> target_frame_id
 # This helps ROS standard tools consume and display position information produced by the device.
-# This also allows something like robot_localization to sit alongside this node.
 tf_mode: 2
 
 # Enable the RTK dongle interface for communication with the 3DM-RTK.

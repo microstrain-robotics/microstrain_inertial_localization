@@ -42,4 +42,4 @@ If you need to modify the source of this repository, or are running on a platfor
 ## Usage
 
 Each use case is seperated into it's own launch file under the `launch` directory. These launch files each have their own set of configuration files under the `config` directory.
-for more information on how to use these launch files please see the [ROS wiki](https://wiki.ros.org/microstrain_inertial_localization)
+for more information on how to use these launch files please see the [ROS wiki](https://wiki.ros.org/microstrain_inertial_localization).
