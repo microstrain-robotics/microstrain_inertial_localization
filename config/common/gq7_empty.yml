@@ -1,4 +1,0 @@
-/**/gq7/gq7_driver:
-  ros__parameters:
-    # Copy this file, fill in your desired parameters here and then specify it with params_file
-    fake_param: "fake_value"

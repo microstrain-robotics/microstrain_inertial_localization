@@ -1,0 +1,9 @@
+# Copy this file, fill in your desired parameters here and then specify it with params_file
+# For a more complete example, look under the "earth", "map", or "odom" directory and look for a file named for your device
+/**/microstrain_inertial_driver:
+  ros__parameters:
+    fake_param: "fake_value"
+
+/**/ntrip_client:
+  ros__parameters:
+    another_fake_param: "another_fake_value"

@@ -7,20 +7,20 @@ from ament_index_python.packages import get_package_share_directory
 
 _PACKAGE_NAME = 'microstrain_inertial_localization'
 
-_GQ7_LAUNCH_FILE = os.path.join(get_package_share_directory(_PACKAGE_NAME), 'launch', 'gq7_launch.py')
+_CV7_INS_LAUNCH_FILE = os.path.join(get_package_share_directory(_PACKAGE_NAME), 'launch', 'cv7_ins_launch.py')
 
-_GQ7_EARTH_PARAMS_FILE = os.path.join(get_package_share_directory(_PACKAGE_NAME), 'config', 'earth', 'gq7.yml')
+_CV7_INS_EARTH_PARAMS_FILE = os.path.join(get_package_share_directory(_PACKAGE_NAME), 'config', 'earth', 'cv7_ins.yml')
 
 def generate_launch_description():
 
   launch_description = []
 
-  gq7_launch = IncludeLaunchDescription(
-    PythonLaunchDescriptionSource(_GQ7_LAUNCH_FILE),
+  cv7_ins_launch = IncludeLaunchDescription(
+    PythonLaunchDescriptionSource(_CV7_INS_LAUNCH_FILE),
     launch_arguments={
-      'params_file': _GQ7_EARTH_PARAMS_FILE
+      'params_file': _CV7_INS_EARTH_PARAMS_FILE
     }.items()
   )
-  launch_description.append(gq7_launch)
+  launch_description.append(cv7_ins_launch)
 
   return LaunchDescription(launch_description)

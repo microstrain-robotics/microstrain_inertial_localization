@@ -11,6 +11,7 @@
 
   <exec_depend version_gte="4.0.0">microstrain_inertial_driver</exec_depend>
   <exec_depend>ntrip_client</exec_depend>
+  <exec_depend>ublox</exec_depend>
 
   <export>
     <build_type>ament_cmake</build_type>
