@@ -37,6 +37,10 @@ def generate_launch_description():
     name       = 'ntrip_client',
     namespace  = '',
     output     = 'screen',
+    remappings = [
+      # If using an F9P, we need to receive fix messages instead of nmea, so subscribe to the same topic as the CV7-INS
+      ('fix', 'ext/llh_position'),
+    ],
     parameters = [
       ParameterFile(LaunchConfiguration('params_file'), allow_substs=True),
     ]

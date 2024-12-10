@@ -96,10 +96,6 @@
     # Set the frame_id to the user requested frame_id
     frame_id: "ublox_f9p_link"
 
-    # Publish NMEA for the ntrip_client
-    publish:
-      nmea: True
-    
     # Enable all the constellations
     gnss:
       gps: true
