@@ -9,7 +9,7 @@ find_package(ament_cmake REQUIRED)
 #############
 
 ## Mark other files for installation (e.g. launch and bag files, etc.)
-install(DIRECTORY urdf config launch
+install(DIRECTORY config launch
   DESTINATION share/${PROJECT_NAME}
 )
 

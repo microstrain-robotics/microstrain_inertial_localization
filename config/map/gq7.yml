@@ -1,8 +1,8 @@
-/**/gq7/gq7_driver:
+/**/microstrain_inertial_driver:
   ros__parameters:
     # This can be set by passing an var to the launch file
-    port     : $(var port)
-    baudrate : $(var baudrate)
+    port     : $(var port /dev/microstrain_main)
+    baudrate : $(var baudrate 115200)
 
     # Disable the transform from the mount to frame id transform as it should be handled from a URDF file and robot_description
     publish_mount_to_frame_id_transform : False
@@ -12,12 +12,12 @@
     use_enu_frame : True
 
     # Configure some frame IDs
-    frame_id          : $(var frame_id)            # Frame ID of all of the filter messages. Represents the location of the GQ& in the tf tree
-    map_frame_id      : $(var map_frame_id)        # Frame ID of the local tangent plane.
-    earth_frame_id    : "earth"                    # Frame ID of the global frame
-    gnss1_frame_id    : $(var gnss1_frame_id)      # Frame ID of GNSS antenna 1. This represents GNSS antenna 1 of the GQ7 in the tf tree
-    gnss2_frame_id    : $(var gnss2_frame_id)      # Frame ID of GNSS antenna 2. This represents GNSS antenna 2 of the GQ7 in the tf tree
-    target_frame_id   : $(var base_link_frame_id)  # Frame ID that we will publish a transform to.
+    frame_id          : $(var frame_id gq7_link)                     # Frame ID of all of the filter messages. Represents the location of the GQ& in the tf tree
+    map_frame_id      : $(var map_frame_id map)                      # Frame ID of the local tangent plane.
+    earth_frame_id    : "earth"                                      # Frame ID of the global frame
+    gnss1_frame_id    : $(var gnss1_frame_id gq7_right_antenna_link) # Frame ID of GNSS antenna 1. This represents GNSS antenna 1 of the GQ7 in the tf tree
+    gnss2_frame_id    : $(var gnss2_frame_id gq7_left_antenna_link)  # Frame ID of GNSS antenna 2. This represents GNSS antenna 2 of the GQ7 in the tf tree
+    target_frame_id   : $(var target_frame_id base_link)          # Frame ID that we will publish a transform to.
 
     # We will use relative transform mode, meaning that we will publish the following transforms from this node
     #   earth_frame_id -> map_frame_id
@@ -30,9 +30,9 @@
     rtk_dongle_enable : True
 
     # If this is enabled, this will connect to the aux port of the GQ7 and listen for RTCM from ROS
-    ntrip_interface_enable : $(var ntrip)
-    aux_port               : $(var aux_port)
-    aux_baudrate           : $(var aux_baudrate)
+    ntrip_interface_enable : $(var ntrip false)
+    aux_port               : $(var aux_port /dev/microstrain_aux)
+    aux_baudrate           : $(var aux_baudrate 115200)
 
     # (GQ7 only) Relative Position Configuration
     #     Reference frame =
@@ -48,9 +48,9 @@
     #     Reference position - Units provided by reference frame (ECEF - meters, LLH - deg, deg, meters)
     # Note: The source selected here will determine the transform published between earth_frame_id and map_frame_id when running in relative transform mode
     filter_relative_position_config : True
-    filter_relative_position_frame  : $(var filter_relative_position_frame)
-    filter_relative_position_source : $(var filter_relative_position_source)
-    filter_relative_position_ref    : $(var filter_relative_position_ref)
+    filter_relative_position_frame  : 2
+    filter_relative_position_source : $(var filter_relative_position_source 2)
+    filter_relative_position_ref    : [0.0, 0.0, 0.0]
 
     # Antenna #1 lever arm offset source
     #     0 - Disabled:  We will not configure the antenna offset, or publish it as a transform
@@ -60,8 +60,8 @@
     #     For GQ7 - in the vehicle frame wrt IMU origin (meters)
     #     For all other models - in the IMU frame wrt IMU origin (meters)
     # Note: Make this as accurate as possible for good performance
-    gnss1_antenna_offset_source : $(var gnss1_antenna_offset_source)
-    gnss1_antenna_offset        : $(var gnss1_antenna_offset)
+    gnss1_antenna_offset_source : 2
+    gnss1_antenna_offset        : [0.0, 0.0, 0.0]
 
     # Antenna #2 lever arm offset source
     #     0 - Disabled:  We will not configure the antenna offset, or publish it as a transform
@@ -71,8 +71,8 @@
     #     For GQ7 - in the vehicle frame wrt IMU origin (meters)
     #     For all other models - in the IMU frame wrt IMU origin (meters)
     # Note: Make this as accurate as possible for good performance
-    gnss2_antenna_offset_source : $(var gnss2_antenna_offset_source)
-    gnss2_antenna_offset        : $(var gnss2_antenna_offset)
+    gnss2_antenna_offset_source : 2
+    gnss2_antenna_offset        : [0.0, 0.0, 0.0]
 
     # (GQ7 only) Filter Initialization control
     #     Auto-Heading alignment selector (note this is a bitfield, you can use more than 1 source) =
@@ -80,7 +80,7 @@
     #         Bit 1 - GNSS kinematic (requires motion, e.g. a GNSS velocity)
     #         Bit 2 - Magnetometer
     #         Bit 3 - External Heading (first valid external heading will be used to initialize the filter)
-    filter_auto_heading_alignment_selector : $(var filter_auto_heading_alignment_selector)
+    filter_auto_heading_alignment_selector : $(var filter_auto_heading_alignment_selector 1)
 
     # For this use case, we will not publish any IMU data
     imu_data_rate : 0
@@ -93,8 +93,33 @@
     gnss2_velocity_data_rate       : 0
     gnss2_odometry_earth_data_rate : 0
 
-    # We will only publish the map odometry message from the filter in this example.
+    # We will publish the global position in both ECEF and LLH for this example
     # Also publish the human readable message which can be echoed from the command line
     filter_human_readable_status_data_rate : 1
+    filter_llh_position_data_rate          : 50
     filter_odometry_earth_data_rate        : 0
     filter_odometry_map_data_rate          : 50
+
+/**/ntrip_client:
+  ros__parameters:
+    # These can be set by passing args to the launch file
+    host       : $(var ntrip_host 192.168.1.1)
+    port       : $(var ntrip_port 2101)
+    mountpoint : $(var ntrip_mountpoint VRS_RTCM3)
+
+    # For this example, we will always assume that we are going to authenticate
+    authenticate : true
+    username : $(var ntrip_username user)
+    password : $(var ntrip_password pass)
+
+    # Allow SSL, but do not allow custom certs and keys
+    ssl : $(var ntrip_ssl false)
+
+    # Since the RTCM will be coming from the RTK base station whose position may be the map frame, set the frame id to map
+    rtcm_frame_id : "map"
+
+    # Use the smaller RTCM message option
+    rtcm_message_package : "rtcm_msgs"
+
+    # Make sure that we can accept longer NMEA sentences
+    nmea_max_length: 128

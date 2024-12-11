@@ -40,7 +40,8 @@ def generate_launch_description():
   microstrain_launch = IncludeLaunchDescription(
     PythonLaunchDescriptionSource(_MICROSTRAIN_INERTIAL_DRIVER_LAUNCH_FILE),
     launch_arguments={
-      'params_file': LaunchConfiguration('params_file')
+      'params_file': LaunchConfiguration('params_file'),
+      'filter_auto_heading_alignment_selector': '4',
     }.items()
   )
   launch_description.append(microstrain_launch)

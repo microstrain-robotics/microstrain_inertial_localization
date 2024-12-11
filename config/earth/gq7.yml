@@ -12,7 +12,7 @@
     use_enu_frame : True
 
     # Configure some frame IDs
-    frame_id          : $(var frame_id gq7_link)                     # Frame ID of all of the filter messages. Represents the location of the GQ& in the tf tree
+    frame_id          : $(var frame_id gq7_link)                     # Frame ID of all of the filter messages. Represents the location of the GQ7 in the tf tree
     earth_frame_id    : "earth"                                      # Frame ID of the global frame
     gnss1_frame_id    : $(var gnss1_frame_id gq7_right_antenna_link) # Frame ID of GNSS antenna 1. This represents GNSS antenna 1 of the GQ7 in the tf tree
     gnss2_frame_id    : $(var gnss2_frame_id gq7_left_antenna_link)  # Frame ID of GNSS antenna 2. This represents GNSS antenna 2 of the GQ7 in the tf tree
